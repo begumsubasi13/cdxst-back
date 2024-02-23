@@ -1,33 +1,30 @@
 package com.project.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.project.service.LocationService;
 
 @RestController
 @RequestMapping("/api/v1/location")
 @CrossOrigin(origins="http://localhost:3000")
 public class LocationController {
 	
+	
+	@Autowired
+    private LocationService locationService;
+	
     @GetMapping("/getNearby")
-    public String getLocation(@RequestParam("latitude") Double latitude, @RequestParam("longitude") Double longitude, @RequestParam("radius") Double radius) {
+    public String getLocation(@RequestParam("latitude") String latitude, @RequestParam("longitude") String longitude, @RequestParam("radius") int radius) {
     	
-        return "Latitude: " + latitude + ", Longitude: " + longitude + ", Radius: " + radius;
+    	locationService.saveLocationRequest(latitude,longitude,radius);
+    	return locationService.getLocation();
     }
     
-    @GetMapping("/getNearby/{latitude}")
-    public String getLocation2(@PathVariable double latitude) {
-    	
-        return "Latitude: " + latitude;
-    }
-    
-    @GetMapping("/test")
-    public String test() {
-    	
-        return "test";
-    }
+
 
 }
