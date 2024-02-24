@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.Pattern;
 
@@ -22,6 +23,9 @@ public class LocationRequest {
 	private String longitude;
 	private int radius;
 	private long requestTime;
+	
+	@Lob
+	private String result;
 	public Long getRequestId() {
 		return requestId;
 	}
@@ -52,6 +56,11 @@ public class LocationRequest {
 	public void setRequestTime(long requestTime) {
 		this.requestTime = requestTime;
 	}
-	
+	public String getResult() {
+		return result;
+	}
+	public void setResult(String result) {
+		this.result = result;
+	}
 
 }

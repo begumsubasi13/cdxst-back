@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.project.exception.handlers.GooglePlacesApiException;
+import com.project.response.EResponseStatus;
+import com.project.response.GenericResponse;
 import com.project.response.GooglePlacesApiResponse;
 import com.project.service.LocationService;
 
@@ -22,10 +25,21 @@ public class LocationController {
     private LocationService locationService;
 	
     @GetMapping("/getNearby")
-    public GooglePlacesApiResponse getLocation(@RequestParam("latitude") String latitude, @RequestParam("longitude") String longitude, @RequestParam("radius") int radius) {
+    public GooglePlacesApiResponse getLocation(@RequestParam("latitude") String latitude, @RequestParam("longitude") String longitude, @RequestParam("radius") int radius) throws GooglePlacesApiException {
     	
-    	locationService.saveLocationRequest(latitude,longitude,radius);
-    	return locationService.getLocation(latitude,longitude,radius);
+    	GooglePlacesApiResponse apiResp = locationService.getLocation(latitude,longitude,radius);
+    	
+    	if(apiResp != null) {
+    		locationService.saveLocationRequest(latitude,longitude,radius,apiResp);
+    		return apiResp;
+    	}
+    	else {
+    		throw GooglePlacesApiException.builder()
+            .withMessage(EResponseStatus.GOOGLE_PLACES_API_ERROR.getStatusDescription())
+            .withErrorCode(EResponseStatus.GOOGLE_PLACES_API_ERROR.getStatusCode())
+            .build();
+
+    	}
     }
     
 

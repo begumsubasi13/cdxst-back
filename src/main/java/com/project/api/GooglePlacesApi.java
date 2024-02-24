@@ -33,8 +33,14 @@ public class GooglePlacesApi {
 	            response.append(inputLine);
 	        }
 	        in.close();
-
-	        return response.toString();
+	        String responseStr = response.toString();
+	        
+	        try {
+				
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+	        return responseStr;
 	    }
 
 }
