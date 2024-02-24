@@ -4,7 +4,8 @@ public enum EResponseStatus {
 	
 	SUCCESS("SUCCESS",0,"SUCCESS"),
 	ERROR("FAILED",999,"FAILED"),
-	REQ_ALREADY_EXISTS_ERROR("FAILED",998,"Request already exists");
+	REQ_ALREADY_EXISTS_ERROR("FAILED",998,"Request already exists"),
+	GOOGLE_PLACES_API_ERROR("FAILED",997,"An error occured during Google Places API call");
 	
 	private String status;
     private int statusCode;

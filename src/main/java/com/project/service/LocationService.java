@@ -3,10 +3,12 @@ package com.project.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.project.api.GooglePlacesApi;
 import com.project.dao.ILocationDao;
 import com.project.entity.LocationRequest;
 import com.project.response.EResponseStatus;
 import com.project.response.GenericResponse;
+import com.project.response.GooglePlacesApiResponse;
 
 @Service
 public class LocationService {
@@ -14,8 +16,17 @@ public class LocationService {
 	@Autowired
     private ILocationDao locationDao;
 	
-	public String getLocation() {
-		return "getting location from location service";
+	public GooglePlacesApiResponse getLocation(final String latitude, final String longitude, final int radius) {
+		GooglePlacesApiResponse response = new GooglePlacesApiResponse();
+		try {
+			String nearbyPlaces = GooglePlacesApi.searchNearbyPlaces(latitude, longitude, radius);
+			response = new GooglePlacesApiResponse(nearbyPlaces, new GenericResponse(EResponseStatus.SUCCESS.getStatus(), EResponseStatus.SUCCESS.getStatusCode(),
+					EResponseStatus.SUCCESS.getStatusDescription()));
+		} catch (Exception e) {
+			return new GooglePlacesApiResponse(null, new GenericResponse(EResponseStatus.GOOGLE_PLACES_API_ERROR.getStatus(), EResponseStatus.GOOGLE_PLACES_API_ERROR.getStatusCode(),
+					EResponseStatus.GOOGLE_PLACES_API_ERROR.getStatusDescription()));
+		}
+		return response;
 	}
 	
 	public GenericResponse saveLocationRequest(final String latitude, final String longitude, final int radius) {
